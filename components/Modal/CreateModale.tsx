@@ -1,0 +1,32 @@
+import * as React from "react"
+
+import {
+  Card,
+  CardContent,
+
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+import { createPortal } from "react-dom"
+import { modalContext } from "./CreateModalContext"
+
+export function CreateModal({children, titre}: {children: React.ReactNode, titre:string}) {
+  const modaleContext = React.useContext(modalContext) as unknown as {isOpen: boolean, close:()=>void}
+  
+  if(!modaleContext?.isOpen)return null
+  return (
+    createPortal(
+    <div className="fixed font-poppins z-50 bg-opacity-50 bg-black top-0 left-0 w-full h-full flex justify-center items-center">
+
+        <Card className="w-[580px] absolute">
+        <CardHeader>
+            <CardTitle className="uppercase font-poppins font-bold">{titre}</CardTitle>
+        </CardHeader>
+        <CardContent>
+            {children}
+        </CardContent>
+        </Card>
+    </div>, document.body)
+  )
+}
