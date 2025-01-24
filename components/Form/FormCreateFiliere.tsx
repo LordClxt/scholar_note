@@ -14,21 +14,21 @@ const FormCreateFiliere = () => {
   return (
     <form>
       <div className="grid w-full items-center gap-4">
-
         <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="name">Nom</Label>
-          <Input id="name" placeholder="Saisir le nom de la filière..." />
+          <Label htmlFor="nom">Nom</Label>
+          <Input id="nom" placeholder="Saisir le nom de la filière..." />
         </div>
 
         <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="framework">Sexe</Label>
+          <Label htmlFor="niv">Niveau</Label>
           <Select>
-            <SelectTrigger id="framework">
+            <SelectTrigger id="niv">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectItem value="1">Licence 1</SelectItem>
               <SelectItem value="2">Licence2</SelectItem>
+              <SelectItem value="3">Licence3</SelectItem>
             </SelectContent>
           </Select>
         </div>
