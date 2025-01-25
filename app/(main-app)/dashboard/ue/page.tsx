@@ -32,7 +32,7 @@ const Page = () => {
     e.preventDefault();
     setInput(e.target.value);
     const filterUe = data.data?.filter((ue) =>
-      ue.intitule.includes(e.target.value)
+      ue.intitule.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setLocalData({ data: filterUe });
   };
