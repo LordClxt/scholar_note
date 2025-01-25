@@ -1,0 +1,60 @@
+"use client"
+import * as React from "react";
+
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { createPortal } from "react-dom";
+import { Button } from "../ui/button";
+import { Cross } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { modalDeleteContext } from "./DeleteModalContext";
+
+export function DeleteModal({ titre, deleteFunction, query }) {
+
+  const queryClient = useQueryClient()
+
+  const modaleContext = React.useContext(modalDeleteContext) as unknown as {
+    isOpen: boolean;
+    close: () => void;
+  };
+
+  const mutation = useMutation({
+    mutationFn: deleteFunction,
+    onSuccess: () => {
+        queryClient.invalidateQueries({queryKey:[query]})
+        modaleContext.close()
+    },
+  });
+
+  if (!modaleContext?.isOpen)return null;
+
+  const handleDelete = ()=>{
+    mutation.mutate()
+  }
+
+
+  return createPortal(
+    <div className="fixed font-poppins z-50 bg-opacity-50 bg-black top-0 left-0 w-full h-full flex justify-center items-center">
+      <Card className="w-[580px] absolute">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="uppercase font-poppins font-bold">
+              {titre}
+            </CardTitle>
+            <Button onClick={modaleContext.close} variant="outline">
+              <Cross className="rotate-45 text-gray-500" />
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <p>Voulez vous vraiment supprimer ?</p>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={handleDelete} variant="destructive" className="w-full">SUPPRIMER</Button>
+
+        </CardFooter>
+      </Card>
+    </div>,
+    document.body
+  );
+}

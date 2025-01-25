@@ -1,4 +1,4 @@
-import { EtudiantTable } from "@/components/Table/EtudiantTable";
+"use client"
 import { SelectComponent } from "@/components/Form/SelectComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,8 +6,19 @@ import {  Search } from "lucide-react";
 import React from "react";
 import CreateModalContext from "@/components/Modal/CreateModalContext";
 import FormCreateEvaluation from "@/components/Form/FormCreateEvaluation";
+import { EvaluationTable } from "@/components/Table/EvaluationTable";
+import { useQuery } from "@tanstack/react-query";
+import { getAllEvaluation } from "@/lib/evaluationServerActions";
+import { Loader } from "@/components/Loader";
 
 const Page = () => {
+
+  const {data, isLoading} = useQuery({
+    queryKey:["evaluations"],
+    queryFn:getAllEvaluation,
+  })
+
+
   return (
     <div className="bg-white p-5 rounded shadow">
       <div className="flex items-center justify-between my-5">
@@ -32,7 +43,10 @@ const Page = () => {
         />
       </div>
       <div className=" bg-white rounded shadow">
-        <EtudiantTable />
+        {
+          isLoading ? <Loader />:
+          <EvaluationTable data={data} /> 
+        }
       </div>
     </div>
   );

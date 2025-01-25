@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import {
@@ -9,54 +10,161 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
+import { modalEditContext } from "../Modal/ModifierContext";
+import { modalContext } from "../Modal/CreateModalContext";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createModule, editModule } from "@/lib/moduleServerActions";
+import { getAllFiliere } from "@/lib/filiereServerActions";
+import { getAllUE } from "@/lib/ueServerActions";
+import { Loader } from "../Loader";
 
-const FormCreateModule = () => {
+interface DataIterface {
+  id?: number | undefined;
+  libele: string;
+  volume_horaire:number;
+  id_filiere:number;
+  id_ue:number
+}
+
+
+
+const FormCreateModule = ({ data }: { data?: DataIterface }) => {
+
+  const modaleContext = React.useContext(modalContext) as unknown as {
+    isOpen: boolean;
+    close: () => void;
+  };
+  // Context de modification
+  const modaleEditContext = React.useContext(modalEditContext) as unknown as {
+    isOpen: boolean;
+    close: () => void;
+  };
+
+  //Récuperation du query client pour invalider les data en cache
+  const queryClient = useQueryClient();
+
+  const isSave = data?.id === undefined;
+
+
+
+  // Récupération des filières
+
+  const { data: filieres, isLoading:filiereLoading } = useQuery({
+    queryKey: ["filieres"],
+    queryFn: getAllFiliere,
+  });
+
+  // Récupérer tous les ue
+  // Récupération des niveaux
+
+  const { data: UE, isLoading: ueLoading} = useQuery({
+    queryKey: ["ue"],
+    queryFn: getAllUE,
+  });
+
+
+  const mutation = useMutation({
+    mutationFn: isSave
+      ? createModule
+      : (dataUpdate) => editModule(dataUpdate, data.id),
+    onSuccess: () => {
+      // Invalider les données en cache
+      queryClient.invalidateQueries({ queryKey: ["modules"] });
+
+      // Fermer la modale
+      if (isSave) {
+        modaleContext.close();
+      } else {
+        modaleEditContext.close();
+      }
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
+  // Gestion Formulaire
+
+  const [libele, setLibele] = useState(isSave ? "" : data.libele);
+  const [volumeHoraire, setVolumeHoraire] = useState(isSave ? "" : data.volume_horaire);
+
+  const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      libele: libele,
+      volume_horaire:volumeHoraire,
+      id_filiere: formData.get('filiere'),
+      id_ue: formData.get('ue')
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    mutation.mutate(data);
+  };
+
+
+  if(filiereLoading || ueLoading){
+    return <Loader />
+  }
+
+
   return (
-    <form>
-      <div className="grid w-full items-center gap-4">
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="nom">Nom</Label>
-          <Input id="nom" placeholder="Saisir le nom du module..." />
-        </div>
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="nom">Volume horaire</Label>
-          <Input id="nom" placeholder="Saisir le volume horaire..." />
-        </div>
+    <>
+      {
+        mutation.isPending && <Loader />
+      }
+      <form onSubmit={handleCreate}>
+        <div className="grid w-full items-center gap-4">
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="nom">Nom</Label>
+            <Input onChange={(e)=>setLibele(e.target.value)} value={libele} id="nom" placeholder="Saisir le nom du module..." />
+          </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="nom">Volume horaire</Label>
+            <Input value={volumeHoraire} onChange={(e)=>setVolumeHoraire(e.target.value)} type="number" min={2} max={100} id="nom" placeholder="Saisir le volume horaire..." />
+          </div>
 
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="fil">Filière</Label>
-          <Select>
-            <SelectTrigger id="fil">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              <SelectItem value="1">GI</SelectItem>
-              <SelectItem value="2">MIAGE</SelectItem>
-              <SelectItem value="3">SCIENCE PO</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="fil">Filière</Label>
+            <Select name="filiere">
+              <SelectTrigger id="fil">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {
+                  filieres.data?.map(filiere=>(
+                    <SelectItem key={filiere.id} value={filiere.id + ""}>{filiere.nom}</SelectItem>
+                  ))
+                }
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="ue">UE</Label>
-          <Select>
-            <SelectTrigger id="ue">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              <SelectItem value="1">UI 1</SelectItem>
-              <SelectItem value="2">UE 2</SelectItem>
-              <SelectItem value="3">UE 3</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="ue">UE</Label>
+            <Select name="ue">
+              <SelectTrigger id="ue">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {
 
-        <div className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button className="px-16 text-white">Ajouter</Button>
+                  UE.data?.map(ue=>(
+                    <SelectItem key={ue.id} value={ue.id + ""}>{ue.intitule}</SelectItem>
+                  ))
+                }
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex ">
+            <Button className="w-full text-white">
+              {isSave ? "Ajouter" : "Modifier"}
+            </Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 

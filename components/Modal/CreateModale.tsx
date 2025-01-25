@@ -1,32 +1,42 @@
-import * as React from "react"
+import * as React from "react";
 
-import {
-  Card,
-  CardContent,
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { createPortal } from "react-dom";
+import { modalContext } from "./CreateModalContext";
+import { Button } from "../ui/button";
+import { Cross } from "lucide-react";
 
-import { createPortal } from "react-dom"
-import { modalContext } from "./CreateModalContext"
+export function CreateModal({
+  children,
+  titre,
+}: {
+  children: React.ReactNode;
+  titre: string;
+}) {
+  const modaleContext = React.useContext(modalContext) as unknown as {
+    isOpen: boolean;
+    close: () => void;
+  };
 
-export function CreateModal({children, titre}: {children: React.ReactNode, titre:string}) {
-  const modaleContext = React.useContext(modalContext) as unknown as {isOpen: boolean, close:()=>void}
-  
-  if(!modaleContext?.isOpen)return null
-  return (
-    createPortal(
+  if (!modaleContext?.isOpen) return null;
+
+  return createPortal(
     <div className="fixed font-poppins z-50 bg-opacity-50 bg-black top-0 left-0 w-full h-full flex justify-center items-center">
-
-        <Card className="w-[580px] absolute">
+      <Card className="w-[580px] absolute">
         <CardHeader>
-            <CardTitle className="uppercase font-poppins font-bold">{titre}</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="uppercase font-poppins font-bold">
+              {titre}
+            </CardTitle>
+            <Button onClick={modaleContext.close} variant="outline">
+              <Cross className="rotate-45 text-gray-500" />
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
-            {children}
-        </CardContent>
-        </Card>
-    </div>, document.body)
-  )
+        <CardContent>{children}</CardContent>
+      </Card>
+    </div>,
+    document.body
+  );
 }

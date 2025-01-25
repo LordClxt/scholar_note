@@ -1,22 +1,17 @@
-"use client";
-import { Player } from "@lottiefiles/react-lottie-player";
-import loader from "@/app/lotties/Animation - 1737725395360.json";
-import { createPortal } from "react-dom";
+"use client"; // Assurez-vous que ce composant est côté client
+import Image from 'next/image';
+import loaderImage from "@/app/img/graduate.gif"
+// import Lottie from "lottie-react"
+
 
 export const Loader = () => {
-  return createPortal(
+  return (
     <div className="fixed z-50 bg-black bg-opacity-80 top-0 left-0 w-full h-full flex justify-center items-center">
-      <div className="bg-yellow-300 p-5 rounded-full">
-        <Player
-            className="relative -top-3 -left-2"
-            autoplay={true}
-            loop={true}
-            controls={true}
-            src={loader}
-            style={{ height: "150px", width: "150px" }}
-        ></Player>
+      <div className="bg-yellow-300 w-[150px] relative h-[150px] flex justify-center items-center p-5 rounded-full">
+        {/* <Lottie animationData={loader} width={200} height={2} /> */}
+        <Image className='rounded-full' src={loaderImage} width={100} height={100} alt='' />
+        {/* <p className='font-poppins font-bold text-white'>CHARGEMENT...</p> */}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 };
