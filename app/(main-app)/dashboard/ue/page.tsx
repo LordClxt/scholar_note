@@ -22,7 +22,7 @@ const Page = () => {
     if (isSuccess) {
       setLocalData(data);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   if (!isSuccess) {
     return <Loader />;

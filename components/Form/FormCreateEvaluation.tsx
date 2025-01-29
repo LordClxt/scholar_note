@@ -133,10 +133,11 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
       id_etudiant: formData.get("id_etudiant"),
       note: note,
       date: date,
-      coefficient: coef,
-      id_enseignant: 2,
+      coefficient: coef,  
+      id_enseignant: 1,
       id_module: formData.get("module"),
       id_periode: formData.get("periode"),
+      type_evaluation: formData.get("type_note"),
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -182,27 +183,31 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
           />
         </div>
 
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="date">Date</Label>
-          <Input
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            id="date"
-            name="date"
-            type="date"
-          />
+        <div className="grid grid-cols-2 gap-1">
+
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="date">Date</Label>
+            <Input
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              id="date"
+              name="date"
+              type="date"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="coef">Coefficiens</Label>
+            <Input
+              value={coef}
+              onChange={(e) => setCoef(e.target.value)}
+              id="coef"
+              name="coefficient"
+              placeholder="Saisir le coefficient..."
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="coef">Coefficiens</Label>
-          <Input
-            value={coef}
-            onChange={(e) => setCoef(e.target.value)}
-            id="coef"
-            name="coefficient"
-            placeholder="Saisir le coefficient..."
-          />
-        </div>
 
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="module">Module</Label>
@@ -238,6 +243,22 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
                   {periode.date_debut} - {periode.date_fin}
                 </SelectItem>
               ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col space-y-1.5">
+          <Label htmlFor="type_note">Type de note</Label>
+          <Select required name="type_note">
+            <SelectTrigger id="type_note">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent position="popper">
+                <SelectItem value="dévoir">
+                  Devoir
+                </SelectItem>
+                <SelectItem value="interrogation">
+                  Interrogation
+                </SelectItem>
             </SelectContent>
           </Select>
         </div>

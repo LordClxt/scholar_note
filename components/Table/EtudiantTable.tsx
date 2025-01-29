@@ -26,6 +26,8 @@ export function EtudiantTable({ data }) {
     return <Loader />;
   }
 
+  let num = 0;
+
   return (
     <Table>
       <TableHeader>
@@ -53,9 +55,11 @@ export function EtudiantTable({ data }) {
               (filiere) => filiere.id == etudiant.id_filiere
             );
 
+            num++
+
             return (
               <TableRow key={etudiant.id}>
-                <TableCell className="font-medium">{etudiant.id}</TableCell>
+                <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
                 <TableCell>{etudiant.matricule}</TableCell>
                 <TableCell>{etudiant.nom}</TableCell>
@@ -75,6 +79,7 @@ export function EtudiantTable({ data }) {
                         sexe: etudiant.sexe,
                         adresse: etudiant.adresse,
                         id_filiere: etudiant.id_filiere,
+                        email:etudiant.email
                       }}
                     />
                   </ModifierModalContext>

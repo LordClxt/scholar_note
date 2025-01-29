@@ -1,11 +1,12 @@
 import React from "react";
 import { SidebarTrigger } from "./ui/sidebar";
+import UserModal from "./UserModal";
 
 const NavBar = () => {
   return (
-    <div className="flex bg-white justify-between items-center w-full p-3 shadow">
+    <div className="relative flex bg-white justify-between items-center w-full p-3 shadow">
       <SidebarTrigger />
-      <div className="w-10 h-10 bg-red-400 rounded-full"></div>
+      <UserModal />
     </div>
   );
 };

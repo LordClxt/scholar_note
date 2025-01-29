@@ -1,12 +1,14 @@
-
+"use client"
+import CardsLine from "@/components/DashboardComponents/CardsLine";
+import { useStore } from "@/store";
 import React from "react";
 
 const page = () => {
+  const token = useStore(state=>state.token)
   return (
-    <div>
-      <div>
-        <h1>Dashboard</h1>
-      </div>
+    <div className="p-8">
+      <CardsLine />
+      {token}
     </div>
   );
 };

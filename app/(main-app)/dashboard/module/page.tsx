@@ -22,7 +22,7 @@ const Page = () => {
     if (isSuccess) {
       setLocalData(data);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();

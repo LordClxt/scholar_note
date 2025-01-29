@@ -14,6 +14,8 @@ import { deleteEnseignant } from "@/lib/enseignantServerActions";
 export function EnseignantTable({ data }) {
   // Récupération des filières
 
+  let num = 0;
+
   return (
     <Table>
       <TableHeader>
@@ -36,9 +38,10 @@ export function EnseignantTable({ data }) {
           </TableRow>
         ) : (
           data.data?.map((enseignant) => {
+            num++
             return (
               <TableRow key={enseignant.id}>
-                <TableCell className="font-medium">{enseignant.id}</TableCell>
+                <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
                 <TableCell>{enseignant.nom}</TableCell>
                 <TableCell>{enseignant.prenom}</TableCell>
@@ -56,6 +59,7 @@ export function EnseignantTable({ data }) {
                         sexe: enseignant.sexe,
                         adresse: enseignant.adresse,
                         specialite: enseignant.specialite,
+                        email:enseignant.email
                       }}
                     />
                   </ModifierModalContext>

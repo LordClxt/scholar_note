@@ -36,6 +36,8 @@ export function EvaluationTable({ data }) {
     return <Loader />;
   }
 
+  let num = 0;
+  
   return (
     <Table>
       <TableHeader>
@@ -68,9 +70,11 @@ export function EvaluationTable({ data }) {
             (periode) => periode.id === evaluation.id_periode
           );
 
+          num++
+
           return (
             <TableRow key={evaluation.id}>
-              <TableCell className="font-medium">{evaluation.id}</TableCell>
+              <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
               <TableCell>{etudiant.matricule}</TableCell>
               <TableCell>{evaluation.note}</TableCell>

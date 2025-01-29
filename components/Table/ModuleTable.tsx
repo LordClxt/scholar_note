@@ -35,6 +35,8 @@ export function ModuleTable({ data }) {
     return <Loader />;
   }
 
+  let num = 0;
+
   return (
     <Table>
       <TableHeader>
@@ -56,13 +58,14 @@ export function ModuleTable({ data }) {
           </TableRow>
         ) : (
           data.data?.map((module) => {
+            num++
             const filiere = filieres.data?.find(
               (filiere) => filiere.id == module.id_filiere
             );
             const ue = UE.data?.find((ue) => ue.id == module.id_ue);
             return (
               <TableRow key={module.id}>
-                <TableCell className="font-medium">{module.id}</TableCell>
+                <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
                 <TableCell>{module.libele}</TableCell>
                 <TableCell>{module.volume_horaire}</TableCell>

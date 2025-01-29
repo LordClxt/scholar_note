@@ -18,6 +18,9 @@ const Page = () => {
     queryFn:getAllEvaluation,
   })
 
+  if(isLoading){
+    return <Loader />
+  }
 
   return (
     <div className="bg-white p-5 rounded shadow">

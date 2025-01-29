@@ -12,6 +12,7 @@ import FormCreateNiveau from "../Form/FormCreateNiveau";
 import { deleteNiveau } from "@/lib/niveauServerActions";
 
 export function NiveauTable({ data }) {
+  let num = 0;
   return (
     <Table>
       <TableHeader>
@@ -29,22 +30,29 @@ export function NiveauTable({ data }) {
             </TableCell>
           </TableRow>
         ) : (
-          data.data?.map((niveau) => (
-            <TableRow key={niveau.id}>
-              <TableCell className="font-medium">{niveau.id}</TableCell>
-              <TableCell>{niveau.nom}</TableCell>
-              <TableCell className="flex gap-1 justify-end">
-                <ModifierModalContext titre={`Modifier la periode`}>
-                  <FormCreateNiveau data={{ id: niveau.id, nom: niveau.nom }} />
-                </ModifierModalContext>
-                <DeleteModalContext
-                  query="niveaux"
-                  deleteFunction={() => deleteNiveau(niveau.id)}
-                  titre="Supprimer ce niveau ?"
-                />
-              </TableCell>
-            </TableRow>
-          ))
+          data.data?.map((niveau) => {
+            num++
+            return (
+              <TableRow key={niveau.id}>
+                <TableCell className="font-medium">
+                  <p className="px-5">{num}</p>
+                </TableCell>
+                <TableCell>{niveau.nom}</TableCell>
+                <TableCell className="flex gap-1 justify-end">
+                  <ModifierModalContext titre={`Modifier la periode`}>
+                    <FormCreateNiveau
+                      data={{ id: niveau.id, nom: niveau.nom }}
+                    />
+                  </ModifierModalContext>
+                  <DeleteModalContext
+                    query="niveaux"
+                    deleteFunction={() => deleteNiveau(niveau.id)}
+                    titre="Supprimer ce niveau ?"
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })
         )}
       </TableBody>
       {/* <TableFooter>

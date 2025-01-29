@@ -23,7 +23,7 @@ export function FiliereTable({ data }) {
   if (isLoading) {
     return <Loader />;
   }
-
+  let num = 0;
   return (
     <Table>
       <TableHeader>
@@ -43,12 +43,13 @@ export function FiliereTable({ data }) {
           </TableRow>
         ) : (
           data.data?.map((filiere) => {
+            num++
             const niveau = niveaux.data?.find(
               (niveau) => niveau.id === filiere.id_niveau
             );
             return (
               <TableRow key={filiere.id}>
-                <TableCell className="font-medium">{filiere.id}</TableCell>
+                <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
                 <TableCell>{filiere.nom}</TableCell>
                 <TableCell>{niveau.nom}</TableCell>

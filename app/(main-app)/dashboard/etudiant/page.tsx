@@ -2,9 +2,7 @@
 import CreateModalContext from "@/components/Modal/CreateModalContext";
 import { EtudiantTable } from "@/components/Table/EtudiantTable";
 import FormCreateEtudiant from "@/components/Form/FormCreateEtudiant";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllEtudiant } from "@/lib/etudiantServerActions";
@@ -23,7 +21,7 @@ const Page = () => {
     if (isSuccess) {
       setLocalData(data);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -51,12 +49,9 @@ const Page = () => {
           <Input
            value={input}
            onChange={handleChangeInput}
-            className="w-[11.6rem]"
+            className="w-[15rem]"
             placeholder="Saisir nom ou matricule..."
           />
-          <Button>
-            <Search className="text-white" />
-          </Button>
         </div>
       </div>
       <div className=" bg-white rounded shadow">

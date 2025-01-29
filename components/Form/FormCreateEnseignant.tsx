@@ -26,6 +26,7 @@ interface DataIterface {
   sexe: string;
   adresse: string;
   specialite: string;
+  email:string
 }
 
 const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
@@ -71,6 +72,7 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
     nom: string;
     prenom: string;
     addresse: string;
+    email:string
   }
 
   const [inputData, setInputData] = useState<inputDataInterface>({
@@ -78,6 +80,7 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
     nom: isSave ? "" : data.nom,
     prenom: isSave ? "" : data.prenom,
     addresse: isSave ? "" : data.adresse,
+    email: isSave?"":data.email
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +100,8 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
       prenom: inputData.prenom,
       adresse: inputData.addresse,
       sexe: formData.get("sexe"),
+      email:inputData.email,
+      mot_de_passe:inputData.nom+"_"+inputData.email
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -109,6 +114,7 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
       <form onSubmit={handleCreate}>
         <div className="grid w-full items-center gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+            
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="nom">Nom</Label>
               <Input
@@ -119,6 +125,7 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
                 placeholder="Saisir le nom..."
               />
             </div>
+
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="prenom">Prenom</Label>
               <Input
@@ -129,6 +136,17 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
                 placeholder="Saisir le prenom..."
               />
             </div>
+          </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="addresse">Email</Label>
+            <Input
+              value={inputData.email}
+              onChange={handleChange}
+              id="email"
+              type="email"
+              name="email"
+              placeholder="Saisir l'email..."
+            />
           </div>
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="addresse">Addresse</Label>

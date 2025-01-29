@@ -12,6 +12,7 @@ import { deletePeriode } from "@/lib/periodeServerActions";
 import DeleteModalContext from "../Modal/DeleteModalContext";
 
 export function PeriodeTable({ data }) {
+  let num = 0;
   return (
     <Table>
       <TableHeader>
@@ -30,29 +31,34 @@ export function PeriodeTable({ data }) {
             </TableCell>
           </TableRow>
         ) : (
-          data.data?.map((periode) => (
-            <TableRow key={periode.id}>
-              <TableCell className="font-medium">{periode.id}</TableCell>
-              <TableCell>{periode.date_debut}</TableCell>
-              <TableCell>{periode.date_fin}</TableCell>
-              <TableCell className="flex gap-1 justify-end">
-                <ModifierModalContext titre={`Modifier la periode`}>
-                  <FormCreatePeriode
-                    data={{
-                      id: periode.id,
-                      date_debut: periode.date_debut,
-                      date_fin: periode.date_fin,
-                    }}
+          data.data?.map((periode) => {
+            num += 1;
+            return (
+              <TableRow key={periode.id}>
+                <TableCell className="font-medium">
+                  <p className="px-5">{num}</p>
+                </TableCell>
+                <TableCell>{periode.date_debut}</TableCell>
+                <TableCell>{periode.date_fin}</TableCell>
+                <TableCell className="flex gap-1 justify-end">
+                  <ModifierModalContext titre={`Modifier la periode`}>
+                    <FormCreatePeriode
+                      data={{
+                        id: periode.id,
+                        date_debut: periode.date_debut,
+                        date_fin: periode.date_fin,
+                      }}
+                    />
+                  </ModifierModalContext>
+                  <DeleteModalContext
+                    query="periodes"
+                    deleteFunction={() => deletePeriode(periode.id)}
+                    titre="Supprimer cette periode ?"
                   />
-                </ModifierModalContext>
-                <DeleteModalContext
-                  query="periodes"
-                  deleteFunction={() => deletePeriode(periode.id)}
-                  titre="Supprimer cette periode ?"
-                />
-              </TableCell>
-            </TableRow>
-          ))
+                </TableCell>
+              </TableRow>
+            );
+          })
         )}
       </TableBody>
       {/* <TableFooter>
