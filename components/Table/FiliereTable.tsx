@@ -13,6 +13,8 @@ import { deleteFiliere } from "@/lib/filiereServerActions";
 import { getAllNiveau } from "@/lib/niveauServerActions";
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "../Loader";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 export function FiliereTable({ data }) {
   const { data: niveaux, isLoading } = useQuery({
@@ -55,6 +57,11 @@ export function FiliereTable({ data }) {
                 <TableCell>{niveau.nom}</TableCell>
 
                 <TableCell className="flex gap-1 justify-end">
+                <Button variant="outline" className="px-10 ">
+                    <Link href={`/dashboard/filiere/${filiere.id}`}>
+                      Afficher
+                    </Link>
+                  </Button>
                   <ModifierModalContext titre={`Modifier la periode`}>
                     <FormCreateFiliere
                       data={{
@@ -69,6 +76,7 @@ export function FiliereTable({ data }) {
                     deleteFunction={() => deleteFiliere(filiere.id)}
                     titre="Supprimer cette filière ?"
                   />
+                  
                 </TableCell>
               </TableRow>
             );

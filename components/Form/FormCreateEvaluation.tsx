@@ -1,4 +1,6 @@
+"use client"
 /* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -21,6 +23,7 @@ import {
   createEvaluation,
   editEvaluation,
 } from "@/lib/evaluationServerActions";
+import { useStore } from "@/store";
 
 interface DataIterface {
   id?: number | undefined;
@@ -31,13 +34,20 @@ interface DataIterface {
   id_module: number;
   id_periode: number;
   note: number;
+  type_evaluation:string;
+  matricule:string;
 }
 
 const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
+
+  // @ts-ignore
+  const user = useStore(state=>state.user)
+
   const modaleContext = React.useContext(modalContext) as unknown as {
     isOpen: boolean;
     close: () => void;
   };
+
   // Context de modification
   const modaleEditContext = React.useContext(modalEditContext) as unknown as {
     isOpen: boolean;
@@ -122,6 +132,10 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
     setModulesState(filterModules);
   };
 
+  const [module, setModule] = useState(isSave?"":data.id_module)
+  const [periode, setPeriode] = useState(isSave?"":data.id_periode)
+  const [typeNote, setTypeNote] = useState(isSave?"":data.type_evaluation)
+  const [matricule, setMatricule] = useState(isSave?"":data.matricule)
   const [note, setNote] = useState(isSave ? "" : data.note);
   const [coef, setCoef] = useState(isSave ? "" : data.coefficient);
   const [date, setDate] = useState(isSave ? "" : data.date);
@@ -130,26 +144,27 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {
-      id_etudiant: formData.get("id_etudiant"),
-      note: note,
+      matricule: formData.get("matricule"),
+      note: +note,
       date: date,
-      coefficient: coef,  
-      id_enseignant: 1,
+      coefficient: +coef,  
+      id_enseignant: +user.id,
       id_module: formData.get("module"),
       id_periode: formData.get("periode"),
-      type_evaluation: formData.get("type_note"),
+      type_evaluation: typeNote,
     };
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // @ts-ignore
     mutation.mutate(data);
   };
 
   return (
+    
     <form onSubmit={handleCreate}>
       <div className="grid w-full items-center gap-4">
         <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="id_etudiant">Matricule Etudiant</Label>
-          <Select name="id_etudiant" required>
+          <Label htmlFor="matricule">Matricule Etudiant</Label>
+          <Select onValueChange={value=>setMatricule(value)} value={matricule.toString()} name="matricule" required>
             <SelectTrigger id="id_etudiant">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -161,7 +176,7 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
                 className="my-1"
               />
               {matricules.map((etudiant) => (
-                <SelectItem key={etudiant.id} value={etudiant.id + ""}>
+                <SelectItem key={etudiant.id} value={etudiant.matricule}>
                   {etudiant.matricule}
                 </SelectItem>
               ))}
@@ -211,7 +226,7 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
 
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="module">Module</Label>
-          <Select required name="module">
+          <Select onValueChange={((value)=>setModule(value))} value={module.toString()} required name="module">
             <SelectTrigger id="module">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -222,18 +237,20 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
                 placeholder="Rechercher un module..."
                 className="my-1"
               />
-              {modulesState.map((module) => (
+              {modulesState.map((module) => {
+                if(user.specialite !== module.libele) return null
+                return(
                 <SelectItem key={module.id} value={module.id + ""}>
                   {module.libele}
                 </SelectItem>
-              ))}
+              )})}
             </SelectContent>
           </Select>
         </div>
 
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="periode">Periode</Label>
-          <Select required name="periode">
+          <Select onValueChange={value=>setPeriode(value)} value={periode.toString()} required name="periode">
             <SelectTrigger id="periode">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -248,7 +265,7 @@ const FormCreateEvaluation = ({ data }: { data?: DataIterface }) => {
         </div>
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="type_note">Type de note</Label>
-          <Select required name="type_note">
+          <Select onValueChange={value=>setTypeNote(value)} value={typeNote.toString()} required name="type_note">
             <SelectTrigger id="type_note">
               <SelectValue placeholder="Select" />
             </SelectTrigger>

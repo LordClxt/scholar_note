@@ -12,12 +12,13 @@ import {
 import { Button } from "../ui/button";
 import { modalContext } from "../Modal/CreateModalContext";
 import { modalEditContext } from "../Modal/ModifierContext";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createEnseignant,
   editEnseignant,
 } from "@/lib/enseignantServerActions";
 import { Loader } from "../Loader";
+import { getAllModule } from "@/lib/moduleServerActions";
 
 interface DataIterface {
   id?: number | undefined;
@@ -39,6 +40,12 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
     isOpen: boolean;
     close: () => void;
   };
+
+
+  const { data: modules, isLoading: moduleLoading } = useQuery({
+    queryKey: ["modules"],
+    queryFn: getAllModule,
+  });
 
   //Récuperation du query client pour invalider les data en cache
   const queryClient = useQueryClient();
@@ -68,7 +75,6 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
   // Gestion formulaire
 
   interface inputDataInterface {
-    specialite: string;
     nom: string;
     prenom: string;
     addresse: string;
@@ -76,7 +82,6 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
   }
 
   const [inputData, setInputData] = useState<inputDataInterface>({
-    specialite: isSave ? "" : data.specialite,
     nom: isSave ? "" : data.nom,
     prenom: isSave ? "" : data.prenom,
     addresse: isSave ? "" : data.adresse,
@@ -91,11 +96,13 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
     }));
   };
 
+  const [selectModule, setSelectModule] = useState(isSave?"":data.specialite)
+
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {
-      specialite: inputData.specialite,
+      specialite: formData.get("specialite"),
       nom: inputData.nom,
       prenom: inputData.prenom,
       adresse: inputData.addresse,
@@ -108,6 +115,9 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
     mutation.mutate(data);
   };
 
+  if(moduleLoading){
+    return <Loader />
+  }
   return (
     <>
       {mutation.isPending && <Loader />}
@@ -160,13 +170,19 @@ const FormCreateEnseignant = ({ data }: { data?: DataIterface }) => {
           </div>
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="specialite">Spécialité</Label>
-            <Input
-              value={inputData.specialite}
-              onChange={handleChange}
-              id="specialite"
-              name="specialite"
-              placeholder="Saisir la spécialité..."
-            />
+            <Select value={selectModule} onValueChange={(value)=>setSelectModule(value)} required name="specialite">
+              <SelectTrigger id="specialite">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {
+                  modules?.data.map(module=>(
+
+                    <SelectItem key={module.id} value={module.libele}>{module.libele}</SelectItem>
+                  ))
+                }
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="sexe">Sexe</Label>

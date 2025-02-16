@@ -22,7 +22,6 @@ interface DataIterface {
   id?: number | undefined;
   libele: string;
   volume_horaire:number;
-  id_filiere:number;
   id_ue:number
 }
 
@@ -46,13 +45,6 @@ const FormCreateModule = ({ data }: { data?: DataIterface }) => {
   const isSave = data?.id === undefined;
 
 
-
-  // Récupération des filières
-
-  const { data: filieres, isLoading:filiereLoading } = useQuery({
-    queryKey: ["filieres"],
-    queryFn: getAllFiliere,
-  });
 
   // Récupérer tous les ue
   // Récupération des niveaux
@@ -94,7 +86,6 @@ const FormCreateModule = ({ data }: { data?: DataIterface }) => {
     const data = {
       libele: libele,
       volume_horaire:volumeHoraire,
-      id_filiere: formData.get('filiere'),
       id_ue: formData.get('ue')
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -103,7 +94,7 @@ const FormCreateModule = ({ data }: { data?: DataIterface }) => {
   };
 
 
-  if(filiereLoading || ueLoading){
+  if(ueLoading){
     return <Loader />
   }
 
@@ -122,22 +113,6 @@ const FormCreateModule = ({ data }: { data?: DataIterface }) => {
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="nom">Volume horaire</Label>
             <Input value={volumeHoraire} onChange={(e)=>setVolumeHoraire(e.target.value)} type="number" min={2} max={100} id="nom" placeholder="Saisir le volume horaire..." />
-          </div>
-
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="fil">Filière</Label>
-            <Select name="filiere">
-              <SelectTrigger id="fil">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent position="popper">
-                {
-                  filieres.data?.map(filiere=>(
-                    <SelectItem key={filiere.id} value={filiere.id + ""}>{filiere.nom}</SelectItem>
-                  ))
-                }
-              </SelectContent>
-            </Select>
           </div>
 
           <div className="flex flex-col space-y-1.5">

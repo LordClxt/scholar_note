@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Cross } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { modalDeleteContext } from "./DeleteModalContext";
+import {motion} from "motion/react"
 
 export function DeleteModal({ titre, deleteFunction, query }) {
 
@@ -35,7 +36,8 @@ export function DeleteModal({ titre, deleteFunction, query }) {
 
   return createPortal(
     <div className="fixed font-poppins z-50 bg-opacity-50 bg-black top-0 left-0 w-full h-full flex justify-center items-center">
-      <Card className="w-[580px] absolute">
+      <motion.div className="w-[580px] absolute" initial={{y:-10}} animate={{y:0}}>
+      <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="uppercase font-poppins font-bold">
@@ -54,6 +56,7 @@ export function DeleteModal({ titre, deleteFunction, query }) {
 
         </CardFooter>
       </Card>
+      </motion.div>
     </div>,
     document.body
   );

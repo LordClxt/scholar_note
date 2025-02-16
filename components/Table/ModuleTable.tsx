@@ -11,17 +11,11 @@ import DeleteModalContext from "../Modal/DeleteModalContext";
 import FormCreateModule from "../Form/FormCreateModule";
 import { deleteModule } from "@/lib/moduleServerActions";
 import { useQuery } from "@tanstack/react-query";
-import { getAllFiliere } from "@/lib/filiereServerActions";
 import { getAllUE } from "@/lib/ueServerActions";
 import { Loader } from "../Loader";
 
 export function ModuleTable({ data }) {
-  // Récupération des filières
-
-  const { data: filieres, isLoading: filiereLoading } = useQuery({
-    queryKey: ["filieres"],
-    queryFn: getAllFiliere,
-  });
+ 
 
   // Récupérer tous les ue
   // Récupération des niveaux
@@ -31,7 +25,7 @@ export function ModuleTable({ data }) {
     queryFn: getAllUE,
   });
 
-  if (ueLoading || filiereLoading) {
+  if (ueLoading) {
     return <Loader />;
   }
 
@@ -44,7 +38,6 @@ export function ModuleTable({ data }) {
           <TableHead className="">Numéro</TableHead>
           <TableHead className="">Nom</TableHead>
           <TableHead className="">Volume horaire</TableHead>
-          <TableHead className="">Filiere</TableHead>
           <TableHead className="">UE</TableHead>
           <TableHead className="text-center">Actions</TableHead>
         </TableRow>
@@ -59,17 +52,13 @@ export function ModuleTable({ data }) {
         ) : (
           data.data?.map((module) => {
             num++
-            const filiere = filieres.data?.find(
-              (filiere) => filiere.id == module.id_filiere
-            );
             const ue = UE.data?.find((ue) => ue.id == module.id_ue);
             return (
               <TableRow key={module.id}>
                 <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
                 <TableCell>{module.libele}</TableCell>
-                <TableCell>{module.volume_horaire}</TableCell>
-                <TableCell>{filiere.nom}</TableCell>
+                <TableCell className="text-center">{module.volume_horaire}</TableCell>
                 <TableCell>{ue.intitule}</TableCell>
 
                 <TableCell className="flex gap-1 justify-end">
@@ -77,8 +66,7 @@ export function ModuleTable({ data }) {
                     <FormCreateModule
                       data={{
                         id: module.id,
-                        libele: module.libele,
-                        id_filiere: module.id_filiere,
+                        libele: module.libele,  
                         id_ue: module.id_ue,
                         volume_horaire: module.volume_horaire,
                       }}

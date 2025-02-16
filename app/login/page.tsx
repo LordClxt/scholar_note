@@ -1,4 +1,6 @@
 import { LoginForm } from "@/components/login-form"
+import Image from "next/image"
+import imageLogin from "@/app/img/pang-yuhao-_kd5cxwZOK4-unsplash.jpg"
 
 export default function LoginPage() {
   return (
@@ -16,6 +18,7 @@ export default function LoginPage() {
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
+        <Image src={imageLogin} fill alt="" />
       </div>
     </div>
   )

@@ -11,6 +11,7 @@ import {
   LibraryBig,
   LogOut,
   NotepadText,
+  User2,
 } from "lucide-react";
 
 import {
@@ -60,7 +61,7 @@ const items = [
     title: "Evaluation",
     url: "/dashboard/evaluation",
     icon: NotepadText,
-    authorization:["admin", "enseignant"]
+    authorization:["enseignant"]
   },
   {
     title: "Filière",
@@ -92,6 +93,12 @@ const items = [
     icon: BookOpen,
     authorization:["admin"]
   },
+  {
+    title: "Profil",
+    url: "/dashboard/user",
+    icon: User2,
+    authorization:["admin", "enseignant", "etudiant"]
+  },
 ];
 
 export function AppSidebar() {
@@ -122,11 +129,11 @@ export function AppSidebar() {
                 if(!item.authorization.includes(role)) return null
                 const isActive = item.url === path
                 
-                return (
+                return (  
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link
-                        className={clsx("hover:bg-yellow-400 group/item  hover:text-white transition-all", isActive?"bg-yellow-400":'')}
+                        className={clsx("hover:bg-yellow-400 active:bg-yellow-400 group/item  hover:text-white transition-all", isActive?"bg-yellow-400":'')}
                         href={item.url}
                       >
                         <item.icon className={clsx("group-hover/item:text-white ", !isActive?"text-black":'text-white')} />

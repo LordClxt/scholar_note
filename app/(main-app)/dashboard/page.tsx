@@ -1,16 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client"
 import CardsLine from "@/components/DashboardComponents/CardsLine";
-import { useStore } from "@/store";
 import React from "react";
 
-const page = () => {
-  const token = useStore(state=>state.token)
+const Page = () => {
   return (
     <div className="p-8">
       <CardsLine />
-      {token}
     </div>
   );
 };
 
-export default page;
+export default Page;
