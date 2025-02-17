@@ -46,6 +46,12 @@ const items = [
     authorization:["etudiant"]
   },
   {
+    title: "Bulletins",
+    url: "/dashboard/bulletin",
+    icon: NotepadText,
+    authorization:["etudiant"]
+  },
+  {
     title: "Etudiant",
     url: "/dashboard/etudiant",
     icon: Backpack,
