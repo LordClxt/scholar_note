@@ -8,8 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "../ui/input";
 
-export function AddEvaluationTable({ data }) {
-  console.log(data);
+export function AddEvaluationTable({ data, handleChange }) {
 
   return (
     <Table className="font-poppins border rounded">
@@ -29,24 +28,24 @@ export function AddEvaluationTable({ data }) {
             </TableCell>
           </TableRow>
         ) : (
-          data?.map((etudiant_module) => {
+          data?.etudiants.map((etudiant_module) => {
             return (
-              <TableRow key={etudiant_module.etudiant.id}>
+              <TableRow key={etudiant_module.id}>
                 <TableCell className="font-medium ">
-                  <p className="px-5">{etudiant_module.etudiant.matricule}</p>
+                  <p className="px-5">{etudiant_module.matricule}</p>
                 </TableCell>
 
                 <TableCell>
-                  {etudiant_module.etudiant.nom}{" "}
-                  {etudiant_module.etudiant.prenom}
+                  {etudiant_module.nom}{" "}
+                  {etudiant_module.prenom}
                 </TableCell>
 
                 <TableCell className="" colSpan={1}>
-                  <Input placeholder="saisir la note" />
+                  <Input defaultValue={0} min={0} max={20} onChange={(e)=>handleChange(e,etudiant_module.id)} name={`notecc_${etudiant_module.id}`} placeholder="saisir la note" />
                 </TableCell>
 
                 <TableCell className="">
-                  <Input placeholder="saisir la note" />
+                  <Input defaultValue={0} min={0} max={20} onChange={(e)=>handleChange(e,etudiant_module.id)} name={`noteex_${etudiant_module.id}`} placeholder="saisir la note" />
                 </TableCell>
               </TableRow>
             );

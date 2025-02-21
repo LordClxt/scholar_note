@@ -58,7 +58,6 @@ export function EvaluationTable({ data }) {
           <TableHead className="">Numéro</TableHead>
           <TableHead className="">Matricule</TableHead>
           <TableHead className="">Note</TableHead>
-          <TableHead className="">Coef</TableHead>
           <TableHead className="">Module</TableHead>
           <TableHead className="">Filiere</TableHead>
           <TableHead className="">Periode</TableHead>
@@ -100,7 +99,6 @@ export function EvaluationTable({ data }) {
 
                 <TableCell>{etudiant.matricule}</TableCell>
                 <TableCell>{evaluation.note}</TableCell>
-                <TableCell>{evaluation.coefficient}</TableCell>
                 <TableCell>{moduleData.libele}</TableCell>
                 <TableCell>{filiere.nom}</TableCell>
                 <TableCell>

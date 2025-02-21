@@ -37,6 +37,7 @@ export function ModuleTable({ data }) {
         <TableRow>
           <TableHead className="">Numéro</TableHead>
           <TableHead className="">Nom</TableHead>
+          <TableHead className="">Nombre de crédit</TableHead>
           <TableHead className="">Volume horaire</TableHead>
           <TableHead className="">UE</TableHead>
           <TableHead className="text-center">Actions</TableHead>
@@ -58,6 +59,7 @@ export function ModuleTable({ data }) {
                 <TableCell className="font-medium"><p className="px-5">{num}</p></TableCell>
 
                 <TableCell>{module.libele}</TableCell>
+                <TableCell className="text-center">{module.credit}</TableCell>
                 <TableCell className="text-center">{module.volume_horaire}</TableCell>
                 <TableCell>{ue.intitule}</TableCell>
 
@@ -69,6 +71,7 @@ export function ModuleTable({ data }) {
                         libele: module.libele,  
                         id_ue: module.id_ue,
                         volume_horaire: module.volume_horaire,
+                        credit:module.credit
                       }}
                     />
                   </ModifierModalContext>
