@@ -28,8 +28,11 @@ export function LoginForm({
   // @ts-ignore
   const loginFunction = useStore((state) => state?.connexion);
   const router = useRouter();
-  const [errors, setErrors] = useState(null);
 
+  router.prefetch('/dashboard/note')
+  router.prefetch('/dashboard/evaluation')
+
+  const [errors, setErrors] = useState(null);
   const [select, setSelect] = useState("etudiant");
 
   const mutation = useMutation({
@@ -78,7 +81,7 @@ export function LoginForm({
 
   return (
     <>
-      {mutation.isPending && <Loader />}
+      {mutation.isPending && !mutation.isSuccess && <Loader />}
       <form
         onSubmit={handleSubmit}
         className={cn("flex flex-col gap-6", className)}

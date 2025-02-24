@@ -45,7 +45,7 @@ export default function Page() {
     // Capturer l'élément DOM référencé par componentRef
     html2canvas(refComp.current).then((canvas) => {
       // Convertir le canvas en image
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL("image/jpeg", 0.7);
 
       // Créer un objet jsPDF
       const pdf = new jsPDF({
@@ -83,7 +83,7 @@ export default function Page() {
               <Button onClick={()=>handleDownloadPDF(bull1)}>Telecharger</Button>
             </div>
           </div>
-          <Bulletin email={user.email} matricule={user.matricule} nom={user.nom} prenom={user.prenom} sexe={user.sexe} refComponent={bull1} matieres_info={sem1} />
+          <Bulletin periode={`${periodes.data[0].date_debut}-${periodes.data[0].date_fin}`} email={user.email} matricule={user.matricule} nom={user.nom} prenom={user.prenom} sexe={user.sexe} refComponent={bull1} matieres_info={sem1} />
           <div className="flex justify-between bg-white rounded shadow p-5">
             <div>
               <p className="font-semibold text-gray-700 font-poppins">
@@ -94,7 +94,7 @@ export default function Page() {
               <Button onClick={()=>handleDownloadPDF(bull2)}>Telecharger</Button>
             </div>
           </div>
-          <Bulletin email={user.email} matricule={user.matricule} nom={user.nom} prenom={user.prenom} sexe={user.sexe} refComponent={bull2} matieres_info={sem2} />
+          <Bulletin periode={`${periodes.data[1].date_debut}-${periodes.data[1].date_fin}`} email={user.email} matricule={user.matricule} nom={user.nom} prenom={user.prenom} sexe={user.sexe} refComponent={bull2} matieres_info={sem2} />
         </>
       )}
       {/* <Bulletin refComponent={componentRef} /> */}
@@ -110,15 +110,16 @@ function Bulletin({
   email,
   sexe,
   matieres_info,
+  periode
 }) {
 
    let somme_moy = 0
-   let somme_coef=0
+   let somme_credit=0
   return (
-    <div ref={refComponent} className=" flex p-20 flex-col gap-10 font-poppins">
+    <div ref={refComponent} className=" flex p-20 flex-col gap-10 font-poppins bg-white rounded shadow">
       {/* Header */}
       <div className="bg-gray-300 rounded-lg text-gray-900 font-bold flex justify-center flex-col items-center p-5">
-        <p>RELEVE DE NOTE - PERIODE</p>
+        <p>RELEVE DE NOTE - {periode}</p>
         <p>Annee scolaire: 2024 - 2025</p>
       </div>
 
@@ -140,7 +141,7 @@ function Bulletin({
         <thead className="bg-gray-300 text-gray-900 ">
           <tr className="text-left">
             <th className="py-2 pl-3 border">Matières</th>
-            <th className="py-2 pl-3 border">Coef.</th>
+            <th className="py-2 pl-3 border">Credit</th>
             <th className="py-2 pl-3 border">Moy</th>
             {/* <th className="py-2 pl-3 border">RG</th> */}
           </tr>
@@ -148,12 +149,12 @@ function Bulletin({
         <tbody>
             {
                 matieres_info.map((mat, index)=>{
-                    somme_moy += mat.moyenne
-                    somme_coef += mat.coef
+                    somme_moy += mat.moyenne * mat.credit
+                    somme_credit += mat.credit
                     return(
                     <tr key={index}>
                         <td className="py-2 pl-3 border">{mat.matiere}</td>
-                        <td className="py-2 pl-3 border">{mat.coef}</td>
+                        <td className="py-2 pl-3 border">{mat.credit}</td>
                         <td className="py-2 pl-3 border">{mat.moyenne}</td>
                     </tr>
                 )})
@@ -168,10 +169,10 @@ function Bulletin({
                 </div>
                 <div className="text-[13px] flex w-2/3 justify-between">
                   <p>
-                    Coef: <strong>{somme_coef}</strong>
+                    Credit: <strong>{somme_credit}</strong>
                   </p>
                   <p>
-                    Moyenne Générale: <strong>{somme_moy/matieres_info.length}</strong>
+                    Moyenne Générale: <strong>{somme_moy/somme_credit}</strong>
                   </p>
                   {/* <p>
                     Rang: <strong>1 / 24</strong>

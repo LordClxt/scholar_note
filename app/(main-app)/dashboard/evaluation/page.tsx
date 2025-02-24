@@ -1,8 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import React, { useEffect, useState } from "react";
-import CreateModalContext from "@/components/Modal/CreateModalContext";
-import FormCreateEvaluation from "@/components/Form/FormCreateEvaluation";
 import { EvaluationTable } from "@/components/Table/EvaluationTable";
 import { useQuery } from "@tanstack/react-query";
 import { getAllEvaluation } from "@/lib/evaluationServerActions";
@@ -17,7 +15,8 @@ import {
 import { getAllPeriode } from "@/lib/periodeServerActions";
 import { getAllFiliere } from "@/lib/filiereServerActions";
 import { Button } from "@/components/ui/button";
-import { Cross } from "lucide-react";
+import { Cross, Plus } from "lucide-react";
+import Link from "next/link";
 
 const Page = () => {
   const { data, isLoading, isSuccess } = useQuery({
@@ -132,9 +131,12 @@ const Page = () => {
         <h1 className="font-poppins font-bold text-3xl uppercase text-zinc-800">
           Evaluations
         </h1>
-        <CreateModalContext titre="Crée une évaluation">
-          <FormCreateEvaluation />
-        </CreateModalContext>
+        <Button className="text-white font-bold font-poppins px-20" asChild>
+          <Link href="/dashboard/evaluation/ajouter" className="flex">
+            <Plus />
+            Ajouter
+          </Link>
+        </Button>
       </div>
       <div className="flex">
         <div className="flex items-center gap-1 my-5 justify-end w-full">

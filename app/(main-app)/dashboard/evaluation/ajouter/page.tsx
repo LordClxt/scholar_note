@@ -16,9 +16,13 @@ import { SelectTrigger } from "@radix-ui/react-select";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Save } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
+
+  const router = useRouter()
+
   // @ts-ignore
   const user = useStore((state) => state.user);
 
@@ -39,7 +43,7 @@ const Page = () => {
   const mutation = useMutation({
     mutationFn:(data)=>axios.post('http://127.0.0.1:8000/ajouter/notes', data),
     onSuccess:()=>{
-      console.log("Terminer");
+      router.push('/dashboard/evaluation')
       
     }
   })
@@ -47,7 +51,7 @@ const Page = () => {
   const [localData, setLoacalData] = useState({etudiants:[], id_module:0, id_enseignant:0, id_periode:''});
   const [periodesState, setPeriodesState] = useState({ data: [] });
   const [periode, setPeriode] = useState("");
-  const [openAlert, setOpenAlert] = useState(false)
+  // const [openAlert, setOpenAlert] = useState(false)
   
   const handleChange = (e, id)=>{
     const {name, value} = e.target
@@ -69,7 +73,7 @@ const Page = () => {
   }
 
   const handleSubmit = ()=>{
-    let count = 0;
+
     if(periode == ''){
       alert("Veuillez choisir une periode")
     }

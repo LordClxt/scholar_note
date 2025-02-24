@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge";
 interface CardNoteInterface {
   module: string;
   date: string;
-  coefficient: number;
+  credit: number;
   date_debut: string;
   date_fin: string;
   enseignant: string;
@@ -15,7 +15,7 @@ interface CardNoteInterface {
 const CardNote = ({
   module,
   date,
-  coefficient,
+  credit,
   date_debut,
   date_fin,
   enseignant,
@@ -32,7 +32,7 @@ const CardNote = ({
           Date: <em>{date}</em>
         </p>
         <p>
-          Coef: <em>{coefficient}</em>
+          Credit: <em>{credit}</em>
         </p>
         <p>
           Periode: <em>{date_debut} - {date_fin}</em>

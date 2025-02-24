@@ -113,8 +113,8 @@ const Page = () => {
         localData.map((evaluation) => (
           <CardNote
             key={evaluation.id}
-            coefficient={evaluation.coefficient}
             date={evaluation.date}
+            credit={evaluation.module.credit}
             date_debut={evaluation.periode.date_debut}
             date_fin={evaluation.periode.date_fin}
             enseignant={

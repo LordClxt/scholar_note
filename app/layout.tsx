@@ -28,7 +28,7 @@ export default function RootLayout({
     if (token) {
       switch (role) {
         case "etudiant":
-          router.push(path != "/login" ? path : "/dashboard/note"); // Redirige vers les notes de si le token existe
+          router.replace(path != "/login" ? path : "/dashboard/note"); // Redirige vers les notes de si le token existe
           break;
         case "enseignant":
           router.push(path != "/login" ? path : "/dashboard/evaluation"); // Redirige vers les evaluations si le token existe

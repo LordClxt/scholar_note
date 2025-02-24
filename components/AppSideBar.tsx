@@ -28,7 +28,6 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import { Button } from "./ui/button";
-import Link from "next/link";
 import { useStore } from "@/store";
 
 // Menu items.
@@ -113,7 +112,7 @@ export function AppSidebar() {
   // @ts-ignore
   const deconnexion = useStore(state=>state.deconnexion)
   const router = useRouter()
-
+  
   // @ts-ignore
   const role = useStore(state=>state.role)
 
@@ -134,17 +133,17 @@ export function AppSidebar() {
                 
                 if(!item.authorization.includes(role)) return null
                 const isActive = item.url === path
-                
+                router.prefetch(item.url)
                 return (  
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link
-                        className={clsx("hover:bg-yellow-400 active:bg-yellow-400 group/item  hover:text-white transition-all", isActive?"bg-yellow-400":'')}
-                        href={item.url}
+                      <button
+                        className={clsx("hover:bg-yellow-400 active:bg-yellow-400 group/item active:text-white hover:text-white transition-all", isActive?"bg-yellow-400":'')}
+                        onClick={()=>router.push(item.url)}
                       >
                         <item.icon className={clsx("group-hover/item:text-white ", !isActive?"text-black":'text-white')} />
-                        <span className={clsx(isActive? "font-semibold text-white ":"", 'font-poppins font-medium ')}>{item.title}</span>
-                      </Link>
+                        <span className={clsx(isActive? "font-semibold text-white ":"", 'font-poppins font-medium active:text-white')}>{item.title}</span>
+                      </button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
