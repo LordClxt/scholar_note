@@ -7,17 +7,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "../ui/input";
+import { AnimatePresence, motion } from "motion/react";
 
-export function AddEvaluationTable({ data, handleChange }) {
-
+export function AddEvaluationTable({ data, handleChange, isCC, isExam }) {
   return (
     <Table className="font-poppins border rounded">
       <TableHeader>
         <TableRow>
           <TableHead className="">Matricule</TableHead>
           <TableHead className="">Nom et prenom</TableHead>
-          <TableHead className="">Controle continue</TableHead>
-          <TableHead className="">Examen</TableHead>
+          <AnimatePresence>
+            {isCC && (
+              <motion.div>
+                <TableHead className="">Controle continue</TableHead>
+              </motion.div>
+            )}
+            {isExam && <TableHead className="">Examen</TableHead>}
+          </AnimatePresence>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -36,17 +42,48 @@ export function AddEvaluationTable({ data, handleChange }) {
                 </TableCell>
 
                 <TableCell>
-                  {etudiant_module.nom}{" "}
-                  {etudiant_module.prenom}
+                  {etudiant_module.nom} {etudiant_module.prenom}
                 </TableCell>
-
-                <TableCell className="" colSpan={1}>
-                  <Input defaultValue={0} min={0} max={20} onChange={(e)=>handleChange(e,etudiant_module.id)} name={`notecc_${etudiant_module.id}`} placeholder="saisir la note" />
-                </TableCell>
-
-                <TableCell className="">
-                  <Input defaultValue={0} min={0} max={20} onChange={(e)=>handleChange(e,etudiant_module.id)} name={`noteex_${etudiant_module.id}`} placeholder="saisir la note" />
-                </TableCell>
+                <AnimatePresence>
+                  {isCC && (
+                    <motion.div
+                    className="w-full"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <TableCell className="w-full" colSpan={1}>
+                        <Input
+                          defaultValue={0}
+                          min={0}
+                          max={20}
+                          onChange={(e) => handleChange(e, etudiant_module.id)}
+                          name={`notecc_${etudiant_module.id}`}
+                          placeholder="saisir la note"
+                          className="w-full"
+                        />
+                      </TableCell>
+                    </motion.div>
+                  )}
+                  {isExam && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <TableCell className="">
+                        <Input
+                          defaultValue={0}
+                          min={0}
+                          max={20}
+                          onChange={(e) => handleChange(e, etudiant_module.id)}
+                          name={`noteex_${etudiant_module.id}`}
+                          placeholder="saisir la note"
+                        />
+                      </TableCell>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </TableRow>
             );
           })

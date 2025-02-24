@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
+import CheckBoxComponent from "@/components/ChackBox";
 import { Loader } from "@/components/Loader";
 import { AddEvaluationTable } from "@/components/Table/AddEvaluationTable ";
 import { Button } from "@/components/ui/button";
@@ -20,8 +21,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
-
-  const router = useRouter()
+  const router = useRouter();
 
   // @ts-ignore
   const user = useStore((state) => state.user);
@@ -41,110 +41,151 @@ const Page = () => {
   });
 
   const mutation = useMutation({
-    mutationFn:(data)=>axios.post('http://127.0.0.1:8000/ajouter/notes', data),
-    onSuccess:()=>{
-      router.push('/dashboard/evaluation')
-      
-    }
-  })
-  
-  const [localData, setLoacalData] = useState({etudiants:[], id_module:0, id_enseignant:0, id_periode:''});
+    mutationFn: (data) =>
+      axios.post("http://127.0.0.1:8000/ajouter/notes", data),
+    onSuccess: () => {
+      router.push("/dashboard/evaluation");
+    },
+  });
+
   const [periodesState, setPeriodesState] = useState({ data: [] });
   const [periode, setPeriode] = useState("");
+  const [isExam, setIsExam] = useState(false);
+  const [isCC, setIsCC] = useState(false);
+  const [localData, setLoacalData] = useState({
+    etudiants: [],
+    id_module: 0,
+    id_enseignant: 0,
+    id_periode: "",
+    isExam: isExam,
+    isCC: isCC,
+  });
   // const [openAlert, setOpenAlert] = useState(false)
-  
-  const handleChange = (e, id)=>{
-    const {name, value} = e.target
+
+  const handleChange = (e, id) => {
+    const { name, value } = e.target;
     setLoacalData({
       ...localData,
-      etudiants: localData.etudiants.map(etudiant=>(etudiant.id == id ? {
-        ...etudiant,
-        [name]:value
-      }: etudiant))
-    })
-  }
+      etudiants: localData.etudiants.map((etudiant) =>
+        etudiant.id == id
+          ? {
+              ...etudiant,
+              [name]: value,
+            }
+          : etudiant
+      ),
+    });
+  };
 
-  const handlePeriodeChange = (text)=>{
-    setPeriode(text)
+  const handlePeriodeChange = (text) => {
+    setPeriode(text);
     setLoacalData({
       ...localData,
-      id_periode:text
-    })
-  }
+      id_periode: text,
+    });
+  };
 
-  const handleSubmit = ()=>{
-
-    if(periode == ''){
-      alert("Veuillez choisir une periode")
-    }
-    else{
+  const handleSubmit = () => {
+    if (periode == "") {
+      alert("Veuillez choisir une periode");
+    } else if (!isCC && !isExam) {
+      alert("Veuillez cochez 'examen' ou 'controle continue'");
+    } else {
       // @ts-ignore
-      mutation.mutate(localData)
+      mutation.mutate(localData);
     }
-  }
+  };
 
   useEffect(() => {
     if (isSuccess && periodeSuccess) {
       setPeriodesState(periodes);
       setLoacalData({
-        id_module:data[0]?.module?.id,
-        id_enseignant:user.id,
-        id_periode:periode,
-        etudiants:[
-          ...data.map(etudiant=>({
+        id_module: data[0]?.module?.id,
+        id_enseignant: user.id,
+        id_periode: periode,
+        isExam: isExam,
+        isCC: isCC,
+        etudiants: [
+          ...data.map((etudiant) => ({
             id: etudiant.etudiant.id,
             nom: etudiant.etudiant.nom,
             matricule: etudiant.etudiant.matricule,
             prenom: etudiant.etudiant.prenom,
             [`notecc_${etudiant.etudiant.id}`]: 0,
-            [`noteex_${etudiant.etudiant.id}`]: 0
-          }))
-        ]
-      })
+            [`noteex_${etudiant.etudiant.id}`]: 0,
+          })),
+        ],
+      });
     }
-  }, [isSuccess, data]);
-
+  }, [isSuccess, data, periodes, periodeSuccess]);
 
   if (periodeLoading) {
     return <Loader />;
   }
 
-
   return (
     <>
-      {
-        mutation.isPending && <Loader />
-      }
+      {mutation.isPending && <Loader />}
       <div className="bg-white p-5 rounded shadow">
         <div className="flex items-center justify-between my-5">
           <h1 className="font-poppins font-bold text-3xl uppercase text-zinc-800">
             Ajouter évaluations
           </h1>
-          <Button onClick={handleSubmit} className="text-white font-bold  px-[7rem]">
+          <Button
+            onClick={handleSubmit}
+            className="text-white font-bold  px-[7rem]"
+          >
             <Save className="font-bold" /> Ajouter
           </Button>
         </div>
-        <div className="my-10">
-          <Select
-            onValueChange={(value) => {
-              handlePeriodeChange(value);
+        <div className="flex justify-end gap-2">
+          <CheckBoxComponent
+            onChange={() => {
+              setIsCC(!isCC);
+              setLoacalData({...localData, isCC:!isCC})
             }}
-            value={periode}
-            required
-          >
-            <SelectTrigger id="module">
-              <SelectValue placeholder="Selectionner une periode" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              {periodesState?.data.map((periode) => (
-                <SelectItem key={periode.id} value={periode.id}>
-                  {periode.date_debut}-{periode.date_fin}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            value={isCC}
+            text="Controle continue"
+          />
+          <CheckBoxComponent
+            onChange={() => {
+              setIsExam(!isExam);
+              setLoacalData({...localData, isExam:!isExam})
+            }}
+            value={isExam}
+            text="Examen"
+          />
+          <div className="my-10">
+            <Select
+              onValueChange={(value) => {
+                handlePeriodeChange(value);
+              }}
+              value={periode}
+              required
+            >
+              <SelectTrigger id="module">
+                <SelectValue placeholder="Selectionner une periode" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                {periodesState?.data.map((periode) => (
+                  <SelectItem key={periode.id} value={periode.id}>
+                    {periode.date_debut}-{periode.date_fin}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        {isLoading ? <Loader /> : <AddEvaluationTable handleChange={handleChange} data={localData} />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <AddEvaluationTable
+            isExam={isExam}
+            isCC={isCC}
+            handleChange={handleChange}
+            data={localData}
+          />
+        )}
       </div>
     </>
   );
