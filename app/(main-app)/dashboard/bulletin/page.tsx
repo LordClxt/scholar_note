@@ -115,6 +115,7 @@ function Bulletin({
 
    let somme_moy = 0
    let somme_credit=0
+   let credit_valid = 0
   return (
     <div ref={refComponent} className=" flex p-20 flex-col gap-10 font-poppins bg-white rounded shadow">
       {/* Header */}
@@ -151,6 +152,9 @@ function Bulletin({
                 matieres_info.map((mat, index)=>{
                     somme_moy += mat.moyenne * mat.credit
                     somme_credit += mat.credit
+                    if(mat.moyenne >= 10){
+                      credit_valid += mat.credit
+                    }
                     return(
                     <tr key={index}>
                         <td className="py-2 pl-3 border">{mat.matiere}</td>
@@ -169,14 +173,14 @@ function Bulletin({
                 </div>
                 <div className="text-[13px] flex w-2/3 justify-between">
                   <p>
-                    Credit: <strong>{somme_credit}</strong>
+                    Credit accumulé: <strong>{credit_valid}</strong>
                   </p>
                   <p>
-                    Moyenne Générale: <strong>{somme_moy/somme_credit}</strong>
+                    Moyenne Générale: <strong className={somme_moy/somme_credit ? "text-green-500":"text-red-500"}>{somme_moy/somme_credit}</strong>
                   </p>
-                  {/* <p>
-                    Rang: <strong>1 / 24</strong>
-                  </p> */}
+                  <p>
+                    Verdict: <strong className={somme_credit == credit_valid ? "text-green-500":"text-red-500"}>{somme_credit == credit_valid ? "Semestre Validé":"Semestre non validé"}</strong>
+                  </p>
                 </div>
               </div>
             </td>
