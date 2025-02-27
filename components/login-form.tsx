@@ -29,8 +29,6 @@ export function LoginForm({
   const loginFunction = useStore((state) => state?.connexion);
   const router = useRouter();
 
-  router.prefetch('/dashboard/note')
-  router.prefetch('/dashboard/evaluation')
 
   const [errors, setErrors] = useState(null);
   const [select, setSelect] = useState("etudiant");
