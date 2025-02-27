@@ -42,7 +42,7 @@ const Page = () => {
 
   const mutation = useMutation({
     mutationFn: (data) =>
-      axios.post("http://127.0.0.1:8000/ajouter/notes", data),
+      axios.post("https://application-gestion-note-backend.onrender.com/ajouter/notes", data),
     onSuccess: () => {
       router.push("/dashboard/evaluation");
     },
