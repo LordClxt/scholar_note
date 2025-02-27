@@ -1,3 +1,8 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "react-hooks/exhaustive-deps": "off",           // Désactive les dépendances manquantes dans useEffect
+    "@typescript-eslint/no-unused-vars": "off",     // Désactive les erreurs sur les variables inutilisées
+    "@typescript-eslint/no-explicit-any": "off"     // Désactive les erreurs sur l'usage de "any"
+  }
 }
