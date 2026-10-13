@@ -3,7 +3,7 @@ from models.Enseignant import Enseignant
 from models.Admin import Admin
 from models.Etudiant import Etudiant
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from datetime import timedelta, datetime, timezone
@@ -49,7 +49,7 @@ async def authenticate(login, password,type, db):
     user = None
     if type == 'etudiant':
         resultat = await db.execute(select(Etudiant)
-                            .where(Etudiant.email == login or Etudiant.matricule == login)
+                            .where(or_(Etudiant.email == login, Etudiant.matricule == login))
                                         )
     if type ==  "enseignant":
         resultat = await db.execute(select(Enseignant)
