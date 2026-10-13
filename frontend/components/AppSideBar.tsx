@@ -133,7 +133,6 @@ export function AppSidebar() {
                 
                 if(!item.authorization.includes(role)) return null
                 const isActive = item.url === path
-                router.prefetch(item.url)
                 return (  
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>

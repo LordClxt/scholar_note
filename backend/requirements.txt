@@ -5,6 +5,8 @@ python-jose[cryptography]
 passlib
 sqlalchemy  
 fastcrud
-bcrypt
+bcrypt==4.0.1
 asyncpg
 python-dotenv
+aiosqlite
+greenlet

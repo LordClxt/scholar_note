@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
+import { API_URL } from "@/lib/api";
 import CheckBoxComponent from "@/components/ChackBox";
 import { Loader } from "@/components/Loader";
 import { AddEvaluationTable } from "@/components/Table/AddEvaluationTable ";
@@ -14,7 +15,7 @@ import { getModuleEvaluation } from "@/lib/evaluationServerActions";
 import { getAllPeriode } from "@/lib/periodeServerActions";
 import { useStore } from "@/store";
 import { SelectTrigger } from "@radix-ui/react-select";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -40,10 +41,13 @@ const Page = () => {
     queryFn: getAllPeriode,
   });
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (data) =>
-      axios.post("https://application-gestion-note-backend.onrender.com/ajouter/notes", data),
+      axios.post(`${API_URL}/ajouter/notes`, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["evaluations"] });
       router.push("/dashboard/evaluation");
     },
   });

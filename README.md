@@ -18,6 +18,16 @@ Application de gestion des notes (filières, niveaux, UE, modules, évaluations,
 - Création d'évaluations et saisie des notes
 - Génération des bulletins
 
+Les tables sont créées automatiquement au démarrage du backend.
+
+## Captures d'écran
+
+| Connexion | Tableau de bord |
+|---|---|
+| ![Connexion](docs/screenshots/01-connexion.png) | ![Tableau de bord](docs/screenshots/02-tableau-de-bord.png) |
+| ![Filières](docs/screenshots/03-filieres.png) | ![Étudiants](docs/screenshots/08-etudiants.png) |
+| ![Modules](docs/screenshots/06-modules.png) | ![Évaluations](docs/screenshots/10-evaluations.png) |
+
 ## Lancer le projet
 
 ### Backend
@@ -26,8 +36,7 @@ Application de gestion des notes (filières, niveaux, UE, modules, évaluations,
 cd backend
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-# créer un fichier .env avec l'URL de la base de données
-alembic upgrade head
+cp .env.example .env   # SQLite par défaut ; DATABASE_URL pour PostgreSQL
 uvicorn Main:app --reload
 ```
 
@@ -35,6 +44,7 @@ uvicorn Main:app --reload
 
 ```bash
 cd frontend
+cp .env.example .env.local   # NEXT_PUBLIC_API_URL = URL du backend
 npm install
 npm run dev
 ```

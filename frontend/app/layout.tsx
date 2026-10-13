@@ -7,7 +7,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // données considérées fraîches 5 min : pas de re-téléchargement à chaque navigation
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function RootLayout({
   children,

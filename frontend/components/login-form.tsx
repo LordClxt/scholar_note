@@ -39,8 +39,9 @@ export function LoginForm({
       loginFunction(data.access_token, data.user, select);
       if(select == "etudiant"){
         router.push("/dashboard/note");
+      } else {
+        router.push("/dashboard/evaluation");
       }
-      router.push("/dashboard/evaluation");
     },
     onError: (err) => {
       // @ts-ignore
