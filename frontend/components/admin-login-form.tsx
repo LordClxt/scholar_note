@@ -73,14 +73,14 @@ export function LoginForm({
         className={cn("flex flex-col gap-6", className)}
         {...props}
       >
-        <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold mb-5">CONNEXION ADMINISTRATEUR</h1>
+        <div className="flex flex-col gap-1">
+          <h2 className="text-xl font-semibold tracking-tight">Connexion administrateur</h2>
           <p className="text-balance text-sm text-muted-foreground">
             Entre ton Email pour te connecter
           </p>
         </div>
         {errors && (
-          <div className="bg-red-200 border text-red-500 text-center border-red-500 rounded p-3">
+          <div className="bg-destructive/10 border text-destructive text-center border-destructive/40 rounded p-3 text-sm">
            {errors}
           </div>
         )}
@@ -114,8 +114,8 @@ export function LoginForm({
             />
           </div>
 
-          <Button type="submit" className="w-full font-bold">
-            CONNEXION
+          <Button type="submit" className="w-full font-semibold">
+            Se connecter
           </Button>
         </div>
       </form>

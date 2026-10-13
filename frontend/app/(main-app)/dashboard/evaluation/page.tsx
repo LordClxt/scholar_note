@@ -126,9 +126,9 @@ const Page = () => {
   }
 
   return (
-    <div className="bg-white p-5 rounded shadow">
+    <div className="sheet sheet-stack p-6">
       <div className="flex items-center justify-between my-5">
-        <h1 className="font-poppins font-bold text-3xl uppercase text-zinc-800">
+        <h1 className="font-poppins font-semibold text-3xl tracking-tight text-foreground border-l-[3px] border-pen pl-3">
           Evaluations
         </h1>
         <Button className="text-white font-bold font-poppins px-20" asChild>
@@ -197,14 +197,14 @@ const Page = () => {
           </div>
           <Button
             onClick={resetFilter}
-            className="font-bold font-poppins text-white"
-            variant="destructive"
+            className="font-medium font-poppins"
+            variant="outline"
           >
-            supprimer les filtres <Cross className="rotate-45" />
+            Effacer les filtres <Cross className="rotate-45" />
           </Button>
         </div>
       </div>
-      <div className=" bg-white rounded shadow">
+      <div className="rounded-lg border overflow-hidden bg-card">
         {isLoading ? <Loader /> : <EvaluationTable data={evaluations} />}
       </div>
     </div>

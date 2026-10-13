@@ -10,6 +10,7 @@ import {
 import ModifierModalContext from "../Modal/ModifierContext";
 import DeleteModalContext from "../Modal/DeleteModalContext";
 import { useQuery } from "@tanstack/react-query";
+import { formatNote } from "@/lib/mention";
 import { Loader } from "../Loader";
 import { getAllEtudiant } from "@/lib/etudiantServerActions";
 import { getAllModule } from "@/lib/moduleServerActions";
@@ -98,11 +99,11 @@ export function EvaluationTable({ data }) {
                 </TableCell>
 
                 <TableCell>{etudiant.matricule}</TableCell>
-                <TableCell>{evaluation.note}</TableCell>
+                <TableCell><span className={"font-hand text-2xl font-bold leading-none " + (evaluation.note >= 10 ? "text-primary" : "text-pen")}>{formatNote(evaluation.note)}</span></TableCell>
                 <TableCell>{moduleData.libele}</TableCell>
                 <TableCell>{filiere.nom}</TableCell>
                 <TableCell>
-                  {periode.date_debut}-{periode.date_fin}
+                  {periode.date_debut} au {periode.date_fin}
                 </TableCell>
 
                 <TableCell className="flex gap-1 justify-end">

@@ -33,12 +33,12 @@ const Page = () => {
   };
 
   return (
-    <div className="bg-white p-5 rounded shadow">
+    <div className="sheet sheet-stack p-6">
       <div className="flex items-center justify-between my-5">
-        <h1 className="font-poppins font-bold text-3xl uppercase text-zinc-800">
+        <h1 className="font-poppins font-semibold text-3xl tracking-tight text-foreground border-l-[3px] border-pen pl-3">
           Filières
         </h1>
-        <CreateModalContext titre="Crée une filière">
+        <CreateModalContext titre="Créer une filière">
           <FormCreateFiliere />
         </CreateModalContext>
       </div>
@@ -52,7 +52,7 @@ const Page = () => {
           />
         </div>
       </div>
-      <div className=" bg-white rounded shadow">
+      <div className="rounded-lg border overflow-hidden bg-card">
         {isLoading ? <Loader /> : <FiliereTable data={localData} />}
       </div>
     </div>

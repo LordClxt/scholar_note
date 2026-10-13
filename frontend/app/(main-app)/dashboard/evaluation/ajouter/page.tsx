@@ -130,9 +130,9 @@ const Page = () => {
   return (
     <>
       {mutation.isPending && <Loader />}
-      <div className="bg-white p-5 rounded shadow">
+      <div className="sheet sheet-stack p-6">
         <div className="flex items-center justify-between my-5">
-          <h1 className="font-poppins font-bold text-3xl uppercase text-zinc-800">
+          <h1 className="font-poppins font-semibold text-3xl tracking-tight text-foreground border-l-[3px] border-pen pl-3">
             Ajouter évaluations
           </h1>
           <Button

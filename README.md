@@ -30,6 +30,8 @@ Les tables sont créées automatiquement au démarrage du backend.
 | ![Filières](docs/screenshots/03-filieres.png) | ![Étudiants](docs/screenshots/08-etudiants.png) |
 | ![Modules](docs/screenshots/06-modules.png) | ![Évaluations](docs/screenshots/10-evaluations.png) |
 
+![Création d'un étudiant](docs/screenshots/16-creation-etudiant.png)
+
 ### Étudiant
 
 | Mes notes | Bulletin |

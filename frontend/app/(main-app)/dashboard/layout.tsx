@@ -13,10 +13,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className={`w-full grow bg-gray-100 `}>
+      <main className={`w-full grow ruled`}>
         {path !== "/dashboard/user" && <NavBar />}
 
-        <div className={path !== "/dashboard/user" ? "p-5" :''}>{children}</div>
+        <div className={path !== "/dashboard/user" ? "p-5 md:p-8" :''}>{children}</div>
       </main>
     </SidebarProvider>
   );

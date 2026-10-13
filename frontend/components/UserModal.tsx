@@ -1,29 +1,38 @@
+"use client"
 import { UserRound } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { Button } from './ui/button'
+import { useStore } from '@/store'
 
 const UserModal = () => {
-
   const [isOpen, setIsOpen] = useState(false)
+  // @ts-ignore
+  const user = useStore((state) => state.user)
+  // @ts-ignore
+  const role = useStore((state) => state.role)
 
   return (
-    <>
-    
-    <Button onClick={()=>setIsOpen(!isOpen)} className="w-10 h-10 ring-1 ring-yellow-500 ring-offset-1 bg-yellow-400 text-white flex justify-center items-center rounded-full">
-        <UserRound  />
-    </Button>
-    {
-        isOpen && <div className='absolute grid grid-cols-1  rounded text-black shadow bg-white text-sm font-poppins top-[4.3rem] right-[10px]'>
-            <p className='py-3 border-b px-8 font-bold text-gray-700'>
-            Tinde Calixte Hassann
-            </p>
-            <Link href="" className='py-3 px-8 hover:underline'>
-                Modifier mon profile
-            </Link>
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Menu du compte"
+        aria-expanded={isOpen}
+        className="size-10 rounded-full bg-primary text-primary-foreground flex justify-center items-center transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      >
+        <UserRound className="size-5" />
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 top-12 z-40 w-60 rounded-md border bg-popover text-sm">
+          <div className="border-b px-4 py-3">
+            <p className="font-semibold">{[user?.prenom, user?.nom].filter(Boolean).join(' ') || 'Mon compte'}</p>
+            <p className="text-muted-foreground capitalize">{role}</p>
+          </div>
+          <Link href="/dashboard/user" onClick={() => setIsOpen(false)} className="block px-4 py-3 hover:bg-muted">
+            Modifier mon profil
+          </Link>
         </div>
-    }
-    </>
+      )}
+    </div>
   )
 }
 

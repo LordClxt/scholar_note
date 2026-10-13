@@ -34,10 +34,10 @@ const Page = () => {
   };
 
   return (
-    <div className='bg-white p-5 rounded shadow'>
+    <div className='sheet sheet-stack p-6'>
       <div className='flex items-center justify-between my-5'>
-        <h1 className='font-poppins font-bold text-3xl uppercase text-zinc-800'>Modules</h1>
-        <CreateModalContext titre='Crée un module'>
+        <h1 className='font-poppins font-semibold text-3xl tracking-tight text-foreground border-l-[3px] border-pen pl-3'>Modules</h1>
+        <CreateModalContext titre='Créer un module'>
           <FormCreateModule />
         </CreateModalContext>
       </div>
@@ -46,7 +46,7 @@ const Page = () => {
                 <Input value={input} onChange={handleChangeInput} className='w-[15rem]' placeholder="Saisir un nom..." />
             </div>
         </div>
-      <div className=' bg-white rounded shadow'>
+      <div className='rounded-lg border overflow-hidden bg-card'>
         {
           isLoading?<Loader />:
           <ModuleTable data={localData} />

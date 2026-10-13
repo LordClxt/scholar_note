@@ -24,7 +24,9 @@ const ModifierModalContext = ({
   return (
     <modalEditContext.Provider value={{ isOpen, close, open }}>
       <Button
-        className="text-white font-bold font-poppins"
+        variant="outline"
+        size="sm"
+        className="font-medium"
         onClick={open}
       >
         Modifier

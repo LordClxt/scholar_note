@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { useStore } from "@/store";
 import { useQuery } from "@tanstack/react-query";
+import { GradeMark } from "@/components/notebook/GradeMark";
 import axios from "axios";
 import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
@@ -73,10 +74,10 @@ export default function Page() {
         <Loader />
       ) : (
         <>
-          <div className="flex justify-between bg-white rounded shadow p-5">
+          <div className="flex justify-between sheet p-5">
             <div>
-              <p className="font-semibold text-gray-700 font-poppins">
-                Bulletin du {data[0].periode}
+              <p className="font-semibold text-foreground font-poppins">
+                Bulletin de la période du {data[0].periode.replace(/-(\d{4}-)/, " au $1")}
               </p>
             </div>
             <div>
@@ -84,10 +85,10 @@ export default function Page() {
             </div>
           </div>
           <Bulletin periode={`${periodes.data[0].date_debut}-${periodes.data[0].date_fin}`} email={user.email} matricule={user.matricule} nom={user.nom} prenom={user.prenom} sexe={user.sexe} refComponent={bull1} matieres_info={sem1} />
-          <div className="flex justify-between bg-white rounded shadow p-5">
+          <div className="flex justify-between sheet p-5">
             <div>
-              <p className="font-semibold text-gray-700 font-poppins">
-                Bulletin du {data[1].periode}
+              <p className="font-semibold text-foreground font-poppins">
+                Bulletin de la période du {data[1].periode.replace(/-(\d{4}-)/, " au $1")}
               </p>
             </div>
             <div>
@@ -113,80 +114,66 @@ function Bulletin({
   periode
 }) {
 
-   let somme_moy = 0
-   let somme_credit=0
-   let credit_valid = 0
+   const somme_moy = matieres_info.reduce((t, m) => t + m.moyenne * m.credit, 0)
+   const somme_credit = matieres_info.reduce((t, m) => t + m.credit, 0)
+   const credit_valid = matieres_info.reduce((t, m) => t + (m.moyenne >= 10 ? m.credit : 0), 0)
+  const moyenne_generale = somme_credit ? somme_moy / somme_credit : 0
+  const valide = somme_credit > 0 && somme_credit == credit_valid
   return (
-    <div ref={refComponent} className=" flex p-20 flex-col gap-10 font-poppins bg-white rounded shadow">
-      {/* Header */}
-      <div className="bg-gray-300 rounded-lg text-gray-900 font-bold flex justify-center flex-col items-center p-5">
-        <p>RELEVE DE NOTE - {periode}</p>
-        <p>Annee scolaire: 2024 - 2025</p>
+    <div ref={refComponent} className="sheet sheet-stack margin-line flex flex-col gap-8 font-poppins bg-white py-12 pl-16 pr-12">
+      {/* En-tête */}
+      <div className="border-b-2 border-foreground pb-4">
+        <h2 className="text-2xl font-semibold tracking-tight">Relevé de notes</h2>
+        <p className="text-muted-foreground">Période du {periode.replace(/-(\d{4}-)/, ' au $1')} - Année scolaire 2024-2025</p>
       </div>
 
-      {/* User information */}
-      <div className="flex items-center gap-3 text-[13px]">
-        <div className="size-32  border-2"></div>
-        <div className="flex flex-col gap-1">
-          <p>Matricule: {matricule}</p>
-          <p>Nom: {nom}</p>
-          <p>Prenom: {prenom}</p>
-          <p>email: {email}</p>
-          <p>Sexe: {sexe}</p>
-          <p>Classe: LINCENC3 GI</p>
-        </div>
+      {/* Informations de l'étudiant */}
+      <div className="flex items-start gap-6 text-sm">
+        <div className="h-32 w-28 shrink-0 border border-dashed border-input rounded-sm"></div>
+        <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5">
+          <dt className="text-muted-foreground">Matricule</dt><dd className="font-medium">{matricule}</dd>
+          <dt className="text-muted-foreground">Nom</dt><dd className="font-medium">{nom}</dd>
+          <dt className="text-muted-foreground">Prénom</dt><dd className="font-medium">{prenom}</dd>
+          <dt className="text-muted-foreground">Email</dt><dd>{email}</dd>
+          <dt className="text-muted-foreground">Sexe</dt><dd>{sexe}</dd>
+          <dt className="text-muted-foreground">Classe</dt><dd>LINCENC3 GI</dd>
+        </dl>
       </div>
 
-      {/* Table */}
-      <table className=" border-collapse rounded-t overflow-hidden border border-gray-300">
-        <thead className="bg-gray-300 text-gray-900 ">
-          <tr className="text-left">
-            <th className="py-2 pl-3 border">Matières</th>
-            <th className="py-2 pl-3 border">Credit</th>
-            <th className="py-2 pl-3 border">Moy</th>
-            {/* <th className="py-2 pl-3 border">RG</th> */}
+      {/* Matières */}
+      <table className="w-full border-collapse text-left">
+        <thead>
+          <tr className="border-b-2 border-foreground text-sm">
+            <th className="py-2 pr-3 font-semibold">Matière</th>
+            <th className="py-2 px-3 font-semibold text-right">Crédits</th>
+            <th className="py-2 pl-3 font-semibold text-right">Moyenne</th>
           </tr>
         </thead>
         <tbody>
             {
                 matieres_info.map((mat, index)=>{
-                    somme_moy += mat.moyenne * mat.credit
-                    somme_credit += mat.credit
-                    if(mat.moyenne >= 10){
-                      credit_valid += mat.credit
-                    }
                     return(
-                    <tr key={index}>
-                        <td className="py-2 pl-3 border">{mat.matiere}</td>
-                        <td className="py-2 pl-3 border">{mat.credit}</td>
-                        <td className="py-2 pl-3 border">{mat.moyenne}</td>
+                    <tr key={index} className="border-b">
+                        <td className="py-2.5 pr-3">{mat.matiere}</td>
+                        <td className="py-2.5 px-3 text-right">{mat.credit}</td>
+                        <td className={"py-2.5 pl-3 text-right font-medium " + (mat.moyenne >= 10 ? "" : "text-pen")}>{mat.moyenne}</td>
                     </tr>
                 )})
             }
         </tbody>
-        <tfoot className="rounded-b overflow-hidden">
-          <tr>
-            <td colSpan={4} className="bg-gray-300 rounded-b">
-              <div className="p-2  flex justify-between">
-                <div className="w-1/3">
-                  <p>RESULTAT TRIMESTRIELS</p>
-                </div>
-                <div className="text-[13px] flex w-2/3 justify-between">
-                  <p>
-                    Credit accumulé: <strong>{credit_valid}</strong>
-                  </p>
-                  <p>
-                    Moyenne Générale: <strong className={somme_moy/somme_credit ? "text-green-500":"text-red-500"}>{somme_moy/somme_credit}</strong>
-                  </p>
-                  <p>
-                    Verdict: <strong className={somme_credit == credit_valid ? "text-green-500":"text-red-500"}>{somme_credit == credit_valid ? "Semestre Validé":"Semestre non validé"}</strong>
-                  </p>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tfoot>
       </table>
+
+      {/* Résultat */}
+      <div className="flex items-end justify-between gap-6">
+        <p className="text-sm text-muted-foreground">
+          Crédits validés : <strong className="text-foreground">{credit_valid}</strong> sur {somme_credit}
+        </p>
+        <div className="flex flex-col items-end">
+          <p className="text-sm text-muted-foreground">Moyenne générale</p>
+          <GradeMark note={moyenne_generale} size="lg" className="mt-2" />
+          <p className={"mt-3 inline-flex rounded-full px-3 py-1 text-sm font-semibold " + (valide ? "bg-emerald-600/10 text-emerald-700" : "bg-pen/10 text-pen")}>{valide ? "Semestre validé" : "Semestre non validé"}</p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,16 +5,16 @@ import HashLoader from "react-spinners/HashLoader";
 const override: CSSProperties = {
   display: "block",
   margin: "0 auto",
-  borderColor: "#fac60a",
+  borderColor: "#1D2F8F",
 };
 
 
 export const Loader = () => {
   return (
-    <div className="fixed z-50 bg-black bg-opacity-80 top-0 left-0 w-full h-full flex justify-center items-center">
-      <div className="bg-white p-10 rounded-full ring-8  ring-yellow-400">
+    <div className="fixed z-50 bg-background/80 backdrop-blur-[2px] top-0 left-0 w-full h-full flex justify-center items-center">
+      <div className="bg-card p-8 rounded-md border shadow-sm">
       <HashLoader
-        color={"#ffc800"}
+        color={"#1D2F8F"}
         cssOverride={override}
         size={50}
         aria-label="Loading Spinner"

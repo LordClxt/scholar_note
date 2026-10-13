@@ -5,7 +5,7 @@ import React from "react";
 
 const Page = () => {
   return (
-    <div className="p-8">
+    <div className="p-2 md:p-4">
       <CardsLine />
     </div>
   );

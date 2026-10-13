@@ -40,6 +40,7 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+  			pen: 'hsl(var(--pen))',
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
@@ -67,8 +68,9 @@ const config: Config = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
 		fontFamily:{
-			'poppins':["Poppins", "serif"],
-			'pacifico':["Pacifico", "serif"],
+			'poppins':["var(--font-ui)", "system-ui", "sans-serif"],
+			'ui':["var(--font-ui)", "system-ui", "sans-serif"],
+			'hand':["var(--font-hand)", "cursive"],
 		}
   	}
   },

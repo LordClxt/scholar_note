@@ -109,13 +109,13 @@ const FormUser = () => {
             </Button>
           )}
         </div>
-        <form onSubmit={handleSubmit} className="bg-white mt-9  p-7 mx-10 rounded shadow ">
+        <form onSubmit={handleSubmit} className="sheet mt-9 p-7 mx-10">
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="nom">Nom</Label>
               <Input
                 disabled={!isEditable}
-                className="disabled:bg-gray-300 disabled:text-black"
+                className="disabled:bg-muted disabled:text-foreground"
                 onChange={handleChangeInput}
                 value={inputData.nom ? inputData.nom : ""}
                 name="nom"
@@ -128,7 +128,7 @@ const FormUser = () => {
               <Label htmlFor="prenom">Prénom</Label>
               <Input
                 disabled={!isEditable}
-                className="disabled:bg-gray-300 disabled:text-black"
+                className="disabled:bg-muted disabled:text-foreground"
                 onChange={handleChangeInput}
                 value={inputData.prenom ? inputData.prenom : ""}
                 name="prenom"
@@ -144,7 +144,7 @@ const FormUser = () => {
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
               <Input
-                className="disabled:bg-gray-300 disabled:text-black"
+                className="disabled:bg-muted disabled:text-foreground"
                 disabled={!isEditable}
                 onChange={handleChangeInput}
                 value={inputData.email? inputData.email : ""}

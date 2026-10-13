@@ -1,5 +1,6 @@
 import React from "react";
-import { Badge } from "./ui/badge";
+import { BookText } from "lucide-react";
+import { GradeMark } from "./notebook/GradeMark";
 
 interface CardNoteInterface {
   module: string;
@@ -23,31 +24,29 @@ const CardNote = ({
   note,
 }: CardNoteInterface) => {
   return (
-    <div className="flex font-poppins gap-3 bg-white px-5 py-10 rounded shadow">
-      <div className="flex flex-grow flex-col gap-1 items-start">
-        <h2 className="font-bold uppercase text-lg underline">
-          Evaluation {module}
-        </h2>
-        <p>
-          Date: <em>{date}</em>
-        </p>
-        <p>
-          Credit: <em>{credit}</em>
-        </p>
-        <p>
-          Periode: <em>{date_debut} - {date_fin}</em>
-        </p>
-        <p>
-          Enseignant: <em>{enseignant}</em>
-        </p>
-        <Badge className="shadow-none text-white px-10 ring-1 ring-yellow-500 ring-offset-1">
-          {type_evaluation}
-        </Badge>
+    <div className="sheet lift margin-line flex flex-col-reverse sm:flex-row sm:items-center font-poppins gap-4 pl-8 pr-6 py-6">
+      <div className="flex flex-grow items-start gap-4">
+        <span className="hidden sm:flex size-11 shrink-0 rounded-lg bg-primary/10 text-primary items-center justify-center">
+          <BookText className="size-5" />
+        </span>
+        <div className="flex flex-col gap-1">
+          <h2 className="font-semibold text-lg tracking-tight">{module}</h2>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span className={"rounded-full px-2.5 py-0.5 text-xs font-medium " + (type_evaluation === "Examen" ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary")}>{type_evaluation}</span>
+            <span>{date}</span>
+          </div>
+          <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+            <dt className="text-muted-foreground">Crédits</dt>
+            <dd>{credit}</dd>
+            <dt className="text-muted-foreground">Période</dt>
+            <dd>{date_debut} au {date_fin}</dd>
+            <dt className="text-muted-foreground">Enseignant</dt>
+            <dd>{enseignant}</dd>
+          </dl>
+        </div>
       </div>
-      <div className="px-5 flex items-center">
-        <h2 className="ring ring-yellow-400 ring-offset-2 flex items-center justify-center rounded-full font-bold text-2xl text-white bg-yellow-400 w-[5rem] h-[5rem]">
-          <span>{note}</span>/<span>20</span>
-        </h2>
+      <div className="sm:px-4 flex items-center">
+        <GradeMark note={note} size="md" />
       </div>
     </div>
   );

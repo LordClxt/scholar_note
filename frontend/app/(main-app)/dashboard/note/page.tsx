@@ -2,6 +2,7 @@
 "use client";
 import CardNote from "@/components/CardNote";
 import { Loader } from "@/components/Loader";
+import { GradeMark } from "@/components/notebook/GradeMark";
 import FiltreModule from "@/components/MesNotes/FiltreModule";
 import FiltrePeriode from "@/components/MesNotes/FiltrePeriode";
 import { Button } from "@/components/ui/button";
@@ -82,10 +83,11 @@ const Page = () => {
     return <Loader />;
   }
   return (
-    <div className=" flex flex-col gap-2">
-      <div className="flex flex-col gap-3 bg-white p-6 rounded shadow">
-        <h1 className="font-bold font-poppins text-3xl">MES EVALUATIONS</h1>
-        <div className="flex gap-1 justify-end ">
+    <div className="flex flex-col gap-4">
+      <NotesHero evaluations={data?.data ?? data ?? []} />
+      <div className="flex flex-wrap items-center justify-between gap-3 sheet px-5 py-4 mb-2">
+        <p className="text-sm text-muted-foreground">{localData.length} évaluation{localData.length > 1 ? "s" : ""}</p>
+        <div className="flex flex-wrap gap-2 justify-end">
           <FiltrePeriode
             selected={selectedPeriode}
             setSelected={setSelectedPeriode}
@@ -100,10 +102,10 @@ const Page = () => {
           />
           <Button
             onClick={resetFilter}
-            className="font-bold font-poppins text-white"
-            variant="destructive"
+            className="font-medium font-poppins"
+            variant="outline"
           >
-            supprimer les filtres <Cross className="rotate-45" />
+            Effacer les filtres <Cross className="rotate-45" />
           </Button>
         </div>
       </div>
@@ -126,7 +128,7 @@ const Page = () => {
           />
         ))
       ) : (
-        <div className="font-poppins gap-3 bg-white px-5 py-5 rounded shadow text-center ">
+        <div className="font-poppins gap-3 sheet px-5 py-5 text-center">
           Vous n&apos;avez pas de note pour le moment
         </div>
       )}
@@ -135,3 +137,33 @@ const Page = () => {
 };
 
 export default Page;
+
+
+function NotesHero({ evaluations }) {
+  const notes = Array.isArray(evaluations) ? evaluations.map((e) => e.note) : []
+  const moyenne = notes.length ? notes.reduce((t, n) => t + n, 0) / notes.length : null
+  const meilleure = notes.length ? Math.max(...notes) : null
+  const reussies = notes.filter((n) => n >= 10).length
+  return (
+    <section className="ink-panel rounded-2xl p-8 shadow-[0_24px_48px_-24px_hsl(231_60%_15%/0.6)]">
+      <div className="absolute inset-y-0 left-6 w-px bg-pen/70" aria-hidden="true" />
+      <div className="relative flex flex-col gap-6 pl-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Mes évaluations</h1>
+          <p className="mt-2 text-white/75">Toutes tes notes, corrigées et classées par module.</p>
+          <div className="mt-6 flex gap-8">
+            <div><p className="text-2xl font-semibold">{notes.length}</p><p className="text-sm text-white/60">notes</p></div>
+            <div><p className="text-2xl font-semibold">{reussies}</p><p className="text-sm text-white/60">au-dessus de 10</p></div>
+            {meilleure !== null && <div><p className="text-2xl font-semibold">{meilleure}</p><p className="text-sm text-white/60">meilleure note</p></div>}
+          </div>
+        </div>
+        {moyenne !== null && (
+          <div className="self-start md:self-auto flex flex-col items-center rounded-xl bg-white px-8 py-5 text-foreground rotate-[1.5deg] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.55)]">
+            <p className="text-sm text-muted-foreground">Ma moyenne</p>
+            <GradeMark note={moyenne} size="lg" className="mt-1" />
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

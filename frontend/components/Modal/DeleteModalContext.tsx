@@ -19,8 +19,9 @@ const DeleteModalContext = ({
   return (
     <modalDeleteContext.Provider value={{ isOpen, close, open }}>
       <Button
-        variant="destructive"
-        className="text-white font-bold font-poppins"
+        variant="ghost"
+        size="sm"
+        className="font-medium text-destructive hover:bg-destructive/10 hover:text-destructive"
         onClick={open}
       >
         Supprimer

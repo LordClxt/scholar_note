@@ -46,16 +46,16 @@ const Page = () => {
   }
   
   return (
-    <div className="bg-white p-5 rounded shadow">
+    <div className="sheet sheet-stack p-6">
       <div className="flex items-center justify-between my-5">
-        <h1 className="font-poppins font-bold text-2xl uppercase text-zinc-800">
-          Module de la filière <span className="text-yellow-400">{data.nom}</span>
+        <h1 className="font-poppins font-semibold text-2xl tracking-tight text-foreground border-l-[3px] border-pen pl-3">
+          Module de la filière <span className="text-primary">{data.nom}</span>
         </h1>
         <CreateModalContext titre={"Associer un module à la filière "+data.nom}>
           <FormFiliereModule data={{id_filiere:data.id}} />
         </CreateModalContext>
       </div>
-      <div className=" bg-white rounded shadow">
+      <div className="rounded-lg border overflow-hidden bg-card">
         {
             !moduleSuccess ? <Loader />:
             <FiliereModuleTable id_filiere={data.id} data={modules} />  

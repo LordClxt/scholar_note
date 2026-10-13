@@ -2,10 +2,14 @@
 "use client";
 import { useStore } from "@/store";
 import "./globals.css";
+import { Schibsted_Grotesk, Caveat } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+const fontUi = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-ui", display: "swap" });
+const fontHand = Caveat({ subsets: ["latin"], variable: "--font-hand", display: "swap", weight: ["600", "700"] });
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,7 +63,7 @@ export default function RootLayout({
   }, [token, router, path, role]);
 
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${fontUi.variable} ${fontHand.variable}`}>
       <body>
         <QueryClientProvider client={queryClient}>
           {children}
